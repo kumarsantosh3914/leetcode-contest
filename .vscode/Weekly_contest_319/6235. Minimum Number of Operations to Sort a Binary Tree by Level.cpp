@@ -33,6 +33,17 @@ using namespace std;
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+/*
+  Explanation:
+  Here the trick is to find the count of no of swap, as we can easily get the array of num at a particular level using BFS traversal.
+  So to evaluate the no. of count in linear complexity we need to use extra space.
+  We will add the level array to a ordered map along with its index as the value and also copy it to a secondary array "u".
+  Now sort array u and have the list of nums in sorted order, basically we will get to know the correct index of each element.
+  Now traverse through the original level arry(t) and check if its value is it correct index or not when in sorted form.
+
+  If not in sorted form then get original index of value which can be get from the map and swap the elements, so that t array will be in sorted form gradually.
+
+*/
 class Solution {
 private:
     int helper(vector<int> &nums){
