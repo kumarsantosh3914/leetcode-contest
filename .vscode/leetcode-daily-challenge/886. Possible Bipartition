@@ -1,0 +1,61 @@
+class Solution {
+private:
+    bool isBipartie;
+    void dfs(int cur_vertex, int color, int *visited, vector<vector<int>> &dislikes) {
+         //coloring the current vertex
+        visited[cur_vertex] = color;
+        for(int i=0; i<dislikes.size(); i++) {
+            //check if vertex is unvisited and is the path form current vertex
+            if(dislikes[i][0] == cur_vertex) {
+                 //unvisited
+                if(visited[dislikes[i][1]] == -1) {
+                    /*change the color for adjacent vertices*/
+                    dfs(dislikes[i][1], color == 1? 0: 1, visited, dislikes);
+                }
+                //if we meet the same color, this means cannot be split into bipartie
+                else if(visited[dislikes[i][1]] == color) 
+                {
+                    isBipartie = false;
+                }
+            }
+        }
+    }
+public:
+    bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
+        vector<int> color (n, 0);
+        unordered_map<int,vector<int>> edges;
+        
+        for(auto item:dislikes)
+        {
+            edges[item[1]-1].push_back(item[0]-1);
+            edges[item[0]-1].push_back(item[1]-1);
+        }
+        for(int i = 0; i<n;++i)
+        {
+            if(color[i]==0)
+            {   
+                int col = 1;  // color is 0::Unvisited, 1::red, 2::blue
+                color[i] = col;
+                stack<int> s; 
+                s.push(i);
+                                
+                while(!s.empty())
+                {
+                    int t = s.top(); s.pop();
+                    col = (color[t]==1)?2:1;   // Flip the color
+                    for(auto elem:edges[t])
+                    {
+                        if(color[elem] == 0)
+                        {   color[elem] = col;
+                            s.push(elem);
+                        }
+                        else if (color[elem]!=col)
+                            return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+};
+
