@@ -1,0 +1,33 @@
+class Solution {
+private:
+    int nn;
+    const int modulo=1e9 + 7;
+private:
+    long long helper(int ind, int space, vector<vector<int>> &dp) {
+        //after filling up all the indexes
+        if(ind == nn+1) {
+            if(space == false) return 1;
+            else return 0;
+        }
+        if(ind > nn+1) return 0;
+        
+        if(dp[ind][space] != -1) return dp[ind][space];
+        long long count = 0;
+        if(space == true) {
+            count += helper(ind+1, false, dp);
+            count += helper(ind+1, true, dp);
+        }
+        else {
+            count += helper(ind+1, false, dp);
+            count += helper(ind+2, false, dp);
+            count += 2 * helper(ind+2, true, dp);
+        }
+        return dp[ind][space]=count%modulo;
+    }
+public:
+    int numTilings(int n) {
+        nn=n;
+        vector<vector<int>> dp(n+1, vector<int>(2, -1));
+        return helper(1, false, dp);
+    }
+};
