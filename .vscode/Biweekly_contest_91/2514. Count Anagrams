@@ -1,0 +1,58 @@
+#define ll long long
+class Solution {
+private:
+    const static int mod = 1e9 + 7, N = 1e5 + 10;
+    ll fact[N];
+    ll power(ll x, ll y, int mod) {
+        ll ans = 1;
+        x = x % mod;
+        while(y > 0) {
+            if(y & 1) {
+                ans = (ans * x) % mod;
+            }
+            y >>= 1;
+            x = (x * x) % mod;
+        }
+        return ans;
+    }
+    ll modInverse(ll n, int mod) {
+        return power(n, mod - 2, mod);
+    }
+    void init() {
+        fact[0] = 1;
+        for(int i=1; i<N; i++) {
+            fact[i] = (fact[i - 1] * i) % mod;
+        }
+    }
+public:
+    int countAnagrams(string s) {
+        init();
+        int n = s.size();
+        vector<string> temp;
+        string value = "";
+        for(int i=0; i<n; i++) {
+            if(s[i] == ' ') {
+                if(value != "") temp.push_back(value);
+                value = "";
+            }
+            else {
+                value.push_back(s[i]);
+            }
+        }
+        if(value != "") temp.push_back(value);
+        ll ans = 1;
+        for(auto it: temp) {
+            unordered_map<char, int> umap;
+            for(int i=0; i<it.size(); i++) {
+                umap[it[i]]++;
+            }
+            ans = (ans * fact[(int)it.size()]) % mod;
+            for(auto pr: umap) {
+                ll inv = modInverse(fact[pr.second], mod) % mod;
+                ans = (ans * inv) % mod;
+            }
+        }
+        return ans;
+    }
+};
+  

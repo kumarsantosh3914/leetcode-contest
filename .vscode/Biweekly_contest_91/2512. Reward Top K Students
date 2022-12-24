@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define ull unsigned long long int
+#define pb push_back
+#define pf push_front
+#define mp make_pair
+#define fi first
+#define se second
+#define p(x) printf("%d\n", x)
+#define pl(x) printf("%lld\n", x)
+#define s(x) scanf("%f", &x)
+#define sl(x) scanf("%lld", &x)
+#define sf(x) scanf("%lf", &x)
+#define bitcount __builtin_popcountll
+#define INF 1e18+9
+// #define int long long
+#define l "\n"
+#define pb push_back
+#define lb lower_bound
+#define ub upper_bound
+#define vv vector<vector<int> > 
+#define um unordered_map<int, int>
+#define m map<int,int>
+class Solution {
+public:
+    struct cmp{
+        bool operator()(const pair<int,int> &p1, const pair<int,int> &p2) const{
+            if(p1.second != p2.second)
+                return (p1.second > p2.second);
+                return p1.first<p2.first;
+        }
+};
+    vector<int> topStudents(vector<string>& positive_feedback, vector<string>& negative_feedback, vector<string>& report, vector<int>& student_id, int k) {
+        unordered_set<string> pos(positive_feedback.begin() , positive_feedback.end());
+        unordered_set<string> neg(negative_feedback.begin() , negative_feedback.end());
+        set<pair<int , int> , cmp> val;
+        map<int, int> mp;
+        for(int i = 0; i<report.size(); i++){
+           stringstream s(report[i]);
+            string word;
+        int sc = 0;
+        while (s >> word){
+                if(neg.find(word) != neg.end()){
+                    sc -= 1;
+                }
+                else if(pos.find(word) != pos.end()){
+                    sc += 3;
+                }
+            }
+            mp[student_id[i]] = sc;
+        }
+        vector<int> ans;
+        for(auto it: mp){
+            val.insert({it.first, it.second});
+        }
+        for(auto it: val){
+            k--;
+            ans.push_back(it.first);
+            if(k == 0) {
+                break;
+            }
+        }
+        return ans;
+    }
+};

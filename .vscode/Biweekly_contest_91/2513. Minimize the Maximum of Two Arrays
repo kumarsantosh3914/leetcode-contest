@@ -1,0 +1,32 @@
+#define ll long long
+class Solution {
+private:
+    long long lc(long long a, long long b){
+        return (a * b)/(__gcd(a,b));
+    }
+public:
+    int minimizeSet(int divisor1, int divisor2, int uniqueCnt1, int uniqueCnt2) {
+        // ll lcm = (divisor1 * divisor2) / (__gcd(divisor1, divisor2));
+        long long lcm = lc(divisor1, divisor2);
+        ll total = uniqueCnt1 + uniqueCnt2;
+        ll ans = 0;
+        ll left = total, right = 1e12;
+        while(left <= right) {
+            ll mid = (left + right) / 2;
+            ll both = mid / lcm;
+            ll onlyA = mid / divisor2 - both;
+            ll onlyB = mid / divisor1 - both;
+            total = max(0ll, uniqueCnt1 - onlyA) + max(0ll, uniqueCnt2 - onlyB);
+            if(mid - onlyA - onlyB >= total + both) {
+                ans = mid;
+                right = mid - 1;
+            }
+            else {
+                left = mid + 1;
+            }
+        }
+        return ans;
+    }
+};
+
+
