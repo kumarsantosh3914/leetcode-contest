@@ -1,0 +1,24 @@
+class Solution {
+    //TC: O(MlogN) + O(N)
+    //SC: O(N)
+public:
+    vector<int> answerQueries(vector<int>& nums, vector<int>& queries) {
+        /*
+        Explanation:
+                Sort input A, since we care the sum and doesn't care the order.
+                Calukate the prefix sum of A, since we want to know the accumulate sum.
+                Binary seach each query q in query, and the index is the result.
+                return result res.
+                */
+        sort(nums.begin(), nums.end());
+        
+        for(int i=1; i<nums.size(); i++) {
+            nums[i] += nums[i-1];
+        }
+        
+        vector<int> ans;
+        for(auto &it:queries) 
+            ans.push_back(upper_bound(nums.begin(), nums.end(), it) - nums.begin());
+        return ans;
+    }
+};
