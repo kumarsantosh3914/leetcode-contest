@@ -1,0 +1,43 @@
+class Solution {
+// private:
+//     static bool Compare(vector<vector<int>> &p1, vector<vector<int>> &p2) {
+//         if(p1[1] < p2[1]) return true;
+//         return false;
+//     }
+// public:
+//     int findMinArrowShots(vector<vector<int>>& points) {
+//         if(points.size() == 0) return 0;
+//         // sort(points.begin(), points.end(), comp);
+//         sort(points.begin(), points.end(),Compare);
+//         int count=1;
+//         int arrows=points[0][1];
+//         int n=points.size();
+        
+//         for(int i=1; i<n; i++) {
+//             if(points[i][0] > arrows) {
+//                 count++;
+//                 arrows=points[i][1];
+//             }
+//         }
+//         return count;
+public:
+    static bool comp(vector<int> &a, vector<int> &b){
+    return a[1] < b[1];
+}
+
+int findMinArrowShots(vector<vector<int>>& points) {
+    if(points.size() == 0) return 0; 
+	
+    sort(points.begin(), points.end(), comp);
+    int arrows = 1;
+    int last = points[0][1];
+    
+    for(int i = 1; i < points.size(); i++){
+        if(points[i][0] > last){
+            arrows++;
+            last = points[i][1];
+        }
+    }
+    return arrows;
+    }
+};
