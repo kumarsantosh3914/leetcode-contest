@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int maxIceCream(vector<int>& costs, int coins) {
+        int cnt = 0;
+        // Method = 1
+        sort(costs.begin(), costs.end());
+        for(int i=0; i<costs.size(); i++) {
+            if(costs[i] > coins) {
+                break;
+            }
+            else {
+                coins -= costs[i];
+                cnt++;
+            }
+        }
+        return cnt;
+        // Method = 2
+        priority_queue<int, vector<int>, greater<int>> pq;
+        for(auto it: costs) {
+            pq.push(it);
+        }
+
+        while(!pq.empty()) {
+            int temp = pq.top();
+            pq.pop();
+
+            coins -= temp;
+            if(coins < 0) break;
+            cnt++;
+        }
+        return cnt;
+    }
+};
