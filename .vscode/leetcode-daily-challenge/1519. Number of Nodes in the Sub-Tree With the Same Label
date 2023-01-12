@@ -1,0 +1,27 @@
+class Solution {
+private:
+    void dfsCountUpdate(int node, int prevNode, vector<vector<int>> &adjList, string &labels, vector<int> &ans, vector<int> &freqMap) {
+        // maintain a count of freq till now
+        int prevCount = freqMap[labels[node] - 'a'];
+        freqMap[labels[node] - 'a'] += 1;
+        // count the no. of chars in all the child subtrees.
+        for(int nextNode: adjList[node]) {
+            if(prevNode == nextNode) continue;
+            dfsCountUpdate(nextNode, node, adjList, labels, ans, freqMap);
+        }
+        ans[node] = freqMap[labels[node] - 'a'] - prevCount;
+    }
+public:
+    vector<int> countSubTrees(int n, vector<vector<int>>& edges, string labels) {
+        vector<vector<int>> adjList(n, vector<int>());
+        for(auto it: edges) {
+            adjList[it[0]].push_back(it[1]);
+            adjList[it[1]].push_back(it[0]);
+        }
+
+        vector<int> ans(n, 0);
+        vector<int> freqMap(26, 0);
+        dfsCountUpdate(0, 0, adjList, labels, ans, freqMap);
+        return ans;
+    }
+};
