@@ -1,0 +1,35 @@
+class Solution {
+private:
+    void gernrateSubsequences(vector<int> &nums, int start, vector<int> &temp, set<vector<int>> &st) {
+        //base case
+        if(nums.size() == start) {
+            if(temp.size() > 1) {
+                st.insert(temp);
+            }
+            return;
+        }
+
+        int curr = nums[start];
+        int prev = temp.size() == 0 ? -105 : temp[temp.size() - 1];
+        if(curr >= prev) {
+            // take
+            temp.push_back(curr);
+            gernrateSubsequences(nums, start + 1, temp, st);
+            // not take
+            temp.pop_back();
+            gernrateSubsequences(nums, start + 1, temp, st);
+        }
+        else {
+            // backtrack
+            gernrateSubsequences(nums, start + 1, temp, st);
+        }
+    }
+public:
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        set<vector<int>> st;
+        vector<int> temp;
+        gernrateSubsequences(nums, 0, temp, st);
+        return vector(st.begin(), st.end());
+    }
+};
+
