@@ -1,0 +1,41 @@
+class Solution {
+private:
+    // valid function to check if a given string is a valid IP address segment
+    bool valid(string str) {
+        // segment length should be between 1 and 3;
+        if(str.size() > 3 || str.size() == 0) return false;
+        // segment should not start with 0, unless it is a single digit 
+        if(str.size() > 1 && str[0] == '0') return false;
+        // segment should not be greater than 255
+        if(str.size() &&  stoi(str) > 255) return false;
+        return true;
+    }
+    // Backtracking function to generate all possible IP address
+    void helper(vector<string> &ans, string output, int idx, string s, int dots) {
+        // if we have already added 3 dots, check if the remaining segment is valid
+        if(dots == 3) {
+            if(valid(s.substr(idx))) {
+                ans.push_back(output + s.substr(idx));
+            }
+            return;
+        }
+
+        int size = s.size();
+        for(int i=idx; i<min(idx + 3, size); i++) {
+            if(valid(s.substr(idx, i - idx + 1))) {
+                output.push_back(s[i]);
+                output.push_back('.');
+                helper(ans, output, i + 1, s, dots + 1);
+                // backtrack
+                output.pop_back();
+            }
+        }
+    }
+public:
+    vector<string> restoreIpAddresses(string s) {
+        vector<string> ans;
+        string result;
+        helper(ans, result, 0, s, 0);
+        return ans;
+    }
+};
