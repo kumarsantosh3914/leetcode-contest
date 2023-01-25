@@ -1,6 +1,6 @@
 # Day 24 Leetcode Daily Challenge
 
-# [Snakes and Ladders]()
+# [Snakes and Ladders](https://leetcode.com/problems/snakes-and-ladders/description/)
 
 ## Graph - BFS
 ## Intuition
