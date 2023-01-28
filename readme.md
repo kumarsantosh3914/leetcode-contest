@@ -196,9 +196,9 @@ public:
 };
 ```
 
-# Day 26 Leetcode Daily Challenge
+# Day 27 Leetcode Daily Challenge
 
-# [Concatenated Words]()
+# [Concatenated Words](https://leetcode.com/problems/concatenated-words/description/)
 
 ## **Intuition**
 The intuition behind this this solution is to use dynamic programming to check if a word can be constructed by the concatenation of other words in the set.
@@ -276,5 +276,63 @@ public:
         }
         return res;
     }
+};
+```
+
+# Day 28 Leetcode Daily Challenges
+
+# [Data Stream as Disjoint Intervals](https://leetcode.com/problems/data-stream-as-disjoint-intervals/description/)
+
+### **For example, suppose the integers from the data stream are 1, 3, 7, 2, 6, ...., then the summary will be:**
+
+```
+[1, 1]
+[1, 1], [3, 3]
+[1, 1], [3, 3], [7, 7]
+[1, 3], [7, 7]
+[1, 3], [6, 7]
+```
+**A simple method is put integers to a set, then iterate data in set to construct the interval list.**
+
+### **Time complexity:**
+**addNum is O(logN), getIntervals is O(n).**
+
+**Space complexity:** O(n)
+
+## **Code**
+```
+class SummaryRanges {
+public:
+ 
+  SummaryRanges() {
+        
+  }
+    
+  void addNum(int val) {
+    data_given.insert(val);
+  }
+    
+  vector<vector<int>> getIntervals() {
+      vector<vector<int>> res;
+      int start = -1;
+      int end = -1;
+      for ( auto  &item: data_given) {
+          if (start == -1) {
+              start = item;
+              end = item;
+          } else if (item == end + 1) {
+              end = item;
+          } else {
+              res.push_back({start, end});
+              start = end = item;
+          }
+      }
+      
+      if (start != -1) res.push_back({start, end});
+      
+      return res;
+  }
+private:
+  set<int> data_given;
 };
 ```
