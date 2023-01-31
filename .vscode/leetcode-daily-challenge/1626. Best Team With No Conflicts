@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int bestTeamScore(vector<int>& s, vector<int>& a) {
+        vector<vector<int>> vec;
+        int n=s.size();
+        for(int i=0; i<n; i++) {
+            vec.push_back({-a[i],-s[i]});
+        }
+        sort(vec.begin(), vec.end());
+        int t[n];
+        memset(t,0,sizeof t);
+        int ans=0;
+        for(int i=0; i<n; i++) {
+            for(int j=i; j>=0; j--) {
+                if(-vec[i][1]<=-vec[j][1]) {
+                    t[i]=max(t[i],t[j]-vec[i][1]);
+                }
+            }
+            ans=max(ans,t[i]);
+        }
+        return ans;
+    }
+};
