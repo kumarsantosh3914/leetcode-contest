@@ -456,3 +456,156 @@ public:
  * obj->put(key,value);
  */
 ```
+
+# Day 30 Leetcode Daily Challenges
+
+# [N-th Tribonacci Number](https://leetcode.com/problems/n-th-tribonacci-number/description/)
+
+## **Explanation**
+Calculate next element `d = a + b + c` , let `(a, b, c) = (b, c, d)` . Repeat this process `n-2` times;
+
+We can loop `n` times and return `i0`.
+
+It can remove the special cases for `n < 2` .
+
+But I did `n - 2` loop on purpose. `i1` and `i2` will get overflow.
+
+Through it won't throw an error in Java. Hardly say it's a right answer.
+
+A possibly better solution is to start with the number before i0, i1, i2.
+
+## **Complexity**
+Time `O(N)`
+
+Space `O(1)`
+
+## **_Code_**
+
+```
+class Solution {
+public:
+    int tribonacci(int n) {
+        if(n < 2) return n;
+        int a = 0, b = 1, c = 1;
+        int d = a + b + c;
+        while(n-- > 2) {
+            d = a + b + c;
+            a = b;
+            b = c;
+            c = d;
+        }
+        return c;
+    }
+};
+```
+
+# Day 31 Leetcode Daily Challenges
+
+# [Best Team With No Conflicts](https://leetcode.com/problems/best-team-with-no-conflicts/description/)
+
+## **_Explanation_**
+Anytime I couldn't solve a problem, the above question bugged me alot. I have a train of thought which I use to get the solution. Feel free to pick what works for you and device your own methods to arrive at solutions.
+
+## **Thinking Forward**
+In this train of thought, we first look at all information that is available to us. We are given 2 arrays of scores and age and the problem suggests that it has something to do with ordering w.r.t ages.
+
+The word `ordering` quickly suggests that we can `sort` the input based on ages. (But what kind of sort ? Ascending or Descending ?)
+
+Will  this sorting even take us closer to the solution ?
+
+**Jot down an example** to answer yourself.
+Let the scores array and ages array be the following (Try to be as random as possible):
+
+`scores : [10, 2, 6, 4, 9]`
+
+`ages : [5, 1, 4, 5, 7]`
+
+Sorting the above array it by age (`ASCEDING`) leads me to ( If ages are equal sort ascending by scores)
+
+`scores : [2, 6, 4, 10, 9]`
+
+`ages : [1, 4, 5, 5, 7]`
+
+Now that we get here, let's observe the constraints again.
+
+`Team is not allowed to have conflicts. A conflict exists if a younger player has a strictly higher score than an older player. A conflict does not occur between players of the same age.`
+
+Let's modify this statement for a pair of sorted arrays. Since the arrays are now sorted by age, any younger player comes before an older player. This means, IF I am choosing a bunch of players for my solution, THEN, in the order from left to right in `scores` array, I am allowed to choose scores as long as they are increasing --> More strictly, they are `non-decreasing` because it is allowed for a `score of younger player = score of older player`.
+
+With the scores being `[2, 6, 4, 10, 9]`
+
+I can pick a team with `[2, 4, 9] => Total = 15`
+
+I can pick a team with `[2, 6, 10] => Total = 18`
+
+Note: In doing the above, I DID NOT consider the age array at all! Because, inherently, age of any element on the left is less than or equal to the ones of the right. (For i < j, age[i] <= age[j])
+
+Now I can reformulate the problem statement saying, 
+
+_We are given **one** array (HERE Scores array) and we can choose any number of element in the order from **LEFT to RIGHT** , PROVIDED that the sequence of elements I pick are **non-decreasing**_.
+
+To put in more formally,
+We have to select a **sequence S**  in the given **array A**, such that for this sequence **S** any pair of **indices i, j** should yeild **S[i] <= S[j]**, and we have to maximize **sum(S)**
+
+So far we have simplified whatever information that was given to us. Let's now go to the next step.
+
+## **Thinking backwards**
+In this train of thought, we think What topics is this problem related to ?
+
+Brainstorm your ideas in this step to find what is relevant to this problem. More formally, the questions you ask yourself are ( the following are random ideas just to see what sticks )
+
+Can I apply two pointers ? ( Doesn't look like it! )
+
+_Can I think of graphs ? ( To be honest, I thought about this to be graph problem for a long time. I thought is it about finding longest path where edges are given between younger player and older player based on age and score constraints. But this didn't lead me anywhere )_
+
+_I see sequence in my problem statement, does this involve any Longest Increasing Subsequence Methods ? (But again LIS is for increasing sequence, but I need non-decreasing, Do I need to tweak LIS probably ? (**You just hit Jackpot! Congratulations!!**)_
+
+Here, if you see my above train of thoughts, in thinking about graphs I was going orthogonal to the solution. IF you see yourself doing this, it is totally fine. What is important is that after you have solved the problem, DON'T jump to the next problem yet. TRY to fix your train of thoughts. Ask yourself, where could you improve? What questions should I ask myself so that I push myself closer to the solution ? What conclusions did I reach that I dropped the idea that Graphs isn't the right solution ? How can I reach this conclusion faster ?
+
+At first, the answers to above questions are difficult to reach, but with practice, this will solution.
+
+## **Constraints**
+BEFORE, we jump to the solution, one IMPORTANT aspect of problems are the constraints.
+
+Experienced programmers always look at constraints first.
+
+In this case, let us see what information can be derived from the constraints given to us We have,
+```
+* 1 <= scores.length, ages.length <= 1000 
+* scores.length == ages.length
+* 1 <= scores[i] <= 106
+* 1 <= ages[i] <= 1000
+```
+
+## _**Code**_
+```
+class Solution {
+public:
+    int bestTeamScore(vector<int>& scores, vector<int>& ages) {
+        vector<pair<int,int>> arr; // Create a array of pairs of age & scores
+        vector<int> ans ((int)scores.size(), 0); // An array to hold answers of LIS ending at given index-- More formally, Longest Non decreasing Subsequence
+        
+        for(int i=0;i<scores.size();i++) {
+            arr.push_back({ages[i], scores[i]});  // Push {age, score} pair in the array
+        }
+         // It is important that age is the first element AND score is the second element  in the pair. This is because in sorting vector of pairs, pair.first is given priority over pair.second
+         sort(arr.begin(), arr.end());
+        
+        // Note: From here on we dont need age at all! We only access arr[i].second to access scores! 
+        int best = 0;   // Store the final answer
+        
+        // Logic of LIS
+        for(int i=0; i<arr.size();i++) {
+            ans[i]=arr[i].second; 
+            for(int j=0;j<i;j++) {
+                if(arr[i].second >= arr[j].second) {
+                    ans[i] = max(ans[i], ans[j] + arr[i].second);
+                }
+            }
+            best = max(best, ans[i]);
+        }
+        
+        return best; // Time to celebrate!
+    }
+};
+```
