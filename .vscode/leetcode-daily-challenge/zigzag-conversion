@@ -1,0 +1,21 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        string ans = "";
+        if(numRows == 1) return s;
+        for(int i=0; i<numRows; i++) {
+            // no of jumps to do for reaching the next element of row
+            int jumps = 2 * (numRows - 1);
+            // increment j always by jumps
+            for(int j=i; j<s.size(); j += jumps) {
+                ans += s[j];
+                // jumps for middle rows
+                int middleJumps = j + jumps - 2 * i;
+                // check if middle jumps are in range
+                if(i > 0 && i < numRows - 1 && middleJumps < s.size()) ans += s[middleJumps];
+            }
+        }
+        return ans;
+    }
+};
+

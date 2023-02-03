@@ -613,7 +613,7 @@ public:
 
 # Day 1 Leetcode Daily Challenges
 
-# [Best Team With No Conflicts](https://leetcode.com/problems/best-team-with-no-conflicts/description/)
+# [Best Team With No Conflicts](https://leetcode.com/problems/greatest-common-divisor-of-strings/)
 
 ## **Intuition**
 - If the two string have a common prefix, then concatenating them in either order should result in the same string.
@@ -638,4 +638,90 @@ public:
         return "";
     }
 };
+```
+
+# Day 2 Leetcode Daily Challenges
+
+# [Verifying an Alien Dictionary](https://leetcode.com/problems/verifying-an-alien-dictionary/description/)
+
+## **Intuition**
+The idea behind this code is to verify if the `words` in the words vector are sorted according to the given alien dictionary. To achieve this, the code first creates a mapping of each character in `order` to its index. Then, it sorts the words in the `words` vector according to the mapping and compares the sorted vector with the original vector. If the two vectors are equal, it means that the words in `words` are sorted according to the alien dictionary.
+
+## **Approach**
+- Create an unordered map `m` to store the mapping of each character in `order` to its index.
+- Define a custom comparison function `cmp` that makes two strings as input and returns a boolean indicating if the first string is smaller than the second string according to the alien dictionary.
+- In the `cmp` function, compare the  characters in the two string by looking up their indices in `m` . If a character in the first string has a smaller index than the character in the second string, return `true` to indicate that the first string is smaller. If a character in the first string has a larger index than the character in the second string, return `false` to indicates that the first string is larger. If the characters are the same, contiune to compare the next characters.
+If all the characters in the two strings are the same and the first string is shorter than or equal to the second string, return `true` . Otherwise, return `false`.
+- In the `isAlienSorted` function, use the `sort` function to sort the words in the `words` vector using the custom comparison function `cmp` .
+- Finally, return the result of comparing the sorted vector with the original vector. If the two vectors are equal, it means that the words in `words` are sorted according to the alien dictionary, so return `true` . Otherwise, return `false` .
+
+## **Code**
+```
+class Solution {
+public:
+    bool isAlienSorted(vector<string>& words, string order) {
+        unordered_map<char, int> map;
+        for (int i = 0; i < order.length(); i++) {
+            map[order[i]] = i;
+        }
+        for (int i = 1; i < words.size(); i++) {
+            string first = words[i - 1];
+            string second = words[i];
+            int n = min(first.length(), second.length());
+            bool flag = false;
+            for (int j = 0; j < n; j++) {
+                if (map[first[j]] < map[second[j]]) {
+                    flag = true;
+                    break;
+                }
+                else if (map[first[j]] > map[second[j]]) {
+                    return false;
+                }
+            }
+            if (!flag && first.length() > second.length()) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+```
+
+# Day 3 Leetcode Daily Challenges
+
+# [Verifying an Alien Dictionary](https://leetcode.com/problems/zigzag-conversion/description/)
+
+## **Approach**
+- Calculate how many increments  you have to do get to the next row element.
+- After calculating we found that no of jumps for rows other than the top and bottom rows is diffrent.
+- So use the diffrent formula for middle rows.
+- Rest is easy just keep check if the increments are in range.
+
+## **Complexity**
+- Time complexity: O(n^2)
+- Space complexity: O(1)
+
+## **code**
+```
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        string ans = "";
+        if(numRows == 1) return s;
+        for(int i=0; i<numRows; i++) {
+            // no of jumps to do for reaching the next element of row
+            int jumps = 2 * (numRows - 1);
+            // increment j always by jumps
+            for(int j=i; j<s.size(); j += jumps) {
+                ans += s[j];
+                // jumps for middle rows
+                int middleJumps = j + jumps - 2 * i;
+                // check if middle jumps are in range
+                if(i > 0 && i < numRows - 1 && middleJumps < s.size()) ans += s[middleJumps];
+            }
+        }
+        return ans;
+    }
+};
+```
 
