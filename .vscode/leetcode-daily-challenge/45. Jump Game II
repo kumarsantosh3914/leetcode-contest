@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int jump=0;
+        int curr=0;
+        int curr_max=0;
+        for(int i=0; i<nums.size()-1; i++) {
+            if(i + nums[i] > curr_max) {
+                curr_max=i + nums[i];
+            }
+            
+            if(i == curr) {
+                jump++;
+                curr=curr_max;
+            }
+        }
+        return jump;
+    }
+};
