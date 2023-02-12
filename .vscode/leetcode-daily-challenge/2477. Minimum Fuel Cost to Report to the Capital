@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define ull unsigned long long int
+#define pb push_back
+#define pf push_front
+#define mp make_pair
+#define fi first
+#define se second
+#define p(x) printf("%d\n", x)
+#define pl(x) printf("%lld\n", x)
+#define s(x) scanf("%f", &x)
+#define sl(x) scanf("%lld", &x)
+#define sf(x) scanf("%lf", &x)
+#define bitcount __builtin_popcountll
+#define INF 1e18+9
+// #define int long long
+#define l "\n"
+#define pb push_back
+#define lb lower_bound
+#define ub upper_bound
+#define vv vector<vector<int> > 
+#define um unordered_map<int, int>
+#define m map<int,int>
+class Solution {
+private:
+    ll output;
+private:
+    int st;
+    vector<vector<int>> adjList;
+    vector<int> subTree;
+    void dfs(int root, int parameter)
+    {
+        subTree[root]=1;
+        for(auto x : adjList[root])
+             if(x!=parameter) {
+                 dfs(x,root);
+                 output += (subTree[x]+st-1)/st;
+                 subTree[root] += subTree[x];
+             }
+    }
+public:
+    long long minimumFuelCost(vector<vector<int>>& roads, int seats) {
+        int n=roads.size()+1;
+        output=0;
+        st=seats;
+        adjList.assign(n+1,vector<int>());
+        subTree.assign(n+1,0);
+        for(auto x : roads) {
+            adjList[x[0]].push_back(x[1]);
+            adjList[x[1]].push_back(x[0]);
+        }
+        dfs(0,-1);
+        return output;
+    }
+};
