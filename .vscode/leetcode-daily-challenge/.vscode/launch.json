@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/santo/OneDrive/Desktop/leetcode_contest",
-      "program": "c:/Users/santo/OneDrive/Desktop/leetcode_contest/build/Debug/outDebug",
+      "cwd": "c:/Users/santo/OneDrive/Desktop/leetcode_contest/.vscode/leetcode-daily-challenge",
+      "program": "c:/Users/santo/OneDrive/Desktop/leetcode_contest/.vscode/leetcode-daily-challenge/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
