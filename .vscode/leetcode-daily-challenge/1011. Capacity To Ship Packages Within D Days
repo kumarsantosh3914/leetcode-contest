@@ -1,0 +1,39 @@
+class Solution {
+private:
+    bool possibleUnderDays(vector<int>& weights, int maxAllowed, int days) {
+        int sum=0;
+        int count=1;
+        for(auto it:weights) {
+            if(it > maxAllowed) {
+                return false;
+            }
+            if(sum + it > maxAllowed) {
+                sum = it;
+                count += 1;
+            }
+            else {
+                sum += it;
+            }
+        }
+        return count <= days;
+    }
+public:
+    int shipWithinDays(vector<int>& weights, int days) {
+        int n=weights.size();
+        int low=1;
+        int high=0;
+        for(auto it:weights) high += it;
+        int ans=high;
+        while(low <= high) {
+            int mid=(low + high) >> 1;
+            if(possibleUnderDays(weights, mid, days)) {
+                ans=mid;
+                high=mid-1;
+            }
+            else {
+                low=mid+1;
+            }
+        }
+        return ans;
+    }
+};
